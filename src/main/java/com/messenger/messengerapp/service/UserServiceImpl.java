@@ -38,11 +38,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(String username) {
+        log.info("Fethcing user {}", username);
         return userRepository.findByUsername(username);
     }
 
     @Override
     public List<User> getUsers() {
+        log.info("Fetching all users");
         return userRepository.findAll();
     }
 }
