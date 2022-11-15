@@ -23,40 +23,35 @@ public class Main {
                     }
 
                     switch (command) {
-                        case "calcSum": {
-                            System.out.println("You trying to calc sum, please enter two numbers");
-                            String numberA = consoleReader.readLine();
-                            String numberB = consoleReader.readLine();
-                            writer.println(command);
-                            writer.println(numberA);
-                            writer.println(numberB);
-                            writer.flush();
-                            String answer = reader.readLine();
-                            System.out.println("Answer is: " + answer);
-                        }
-                        break;
                         case "serverTime": {
-                            writer.println(command);
-                            writer.flush();
-
-                            String answer = reader.readLine();
-                            System.out.println("server time is " + answer);
+                            getServerTime(writer, command, reader, "server time is ");
                             break;
                         }
                         case "register": {
-                            writer.println(command);
-                            writer.flush();
-                            System.out.println("Enter name and password");
-                            String name = consoleReader.readLine();
-                            String password = consoleReader.readLine();
-                            writer.println(name);
-                            writer.println(password);
-                            writer.flush();
-
-                            String answer = reader.readLine();
-                            System.out.println("Server answer = " + answer);
+                            addUser(consoleReader, reader, writer, command);
                             break;
                         }
+                        case "login": {
+                            writer.println(command);
+                            writer.flush();
+                            System.out.println("Enter login and password");
+                            String login = consoleReader.readLine();
+                            String pass = consoleReader.readLine();
+                            writer.println(login);
+                            getServerTime(writer, pass, reader, "Server answer = ");
+                            break;
+
+                        }
+                        case "delete": {
+                            writer.println(command);
+                            writer.flush();
+                            System.out.println("Enter login for delete");
+                            String login = consoleReader.readLine();
+                            writer.println(login);
+                            System.out.println("User " + login + " deleted");
+                            break;
+                        }
+
                         default:
                             System.out.println("unknown command");
                     }
@@ -68,5 +63,22 @@ public class Main {
             }
             System.out.println("disconnected from server");
         }
+    }
+
+    private static void getServerTime(PrintWriter writer, String command, BufferedReader reader, String x) throws IOException {
+        writer.println(command);
+        writer.flush();
+        String answer = reader.readLine();
+        System.out.println(x + answer);
+    }
+
+    private static void addUser(BufferedReader consoleReader, BufferedReader reader, PrintWriter writer, String command) throws IOException {
+        writer.println(command);
+        writer.flush();
+        System.out.println("Enter name and password");
+        String name = consoleReader.readLine();
+        String password = consoleReader.readLine();
+        writer.println(name);
+        getServerTime(writer, password, reader, "Server answer = ");
     }
 }
