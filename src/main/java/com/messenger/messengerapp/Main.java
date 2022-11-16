@@ -51,6 +51,18 @@ public class Main {
                             break;
                         }
 
+                        case "message": {
+                            writer.println(command);
+                            writer.flush();
+                            System.out.println("Enter user to send message: ");
+                            String userToSendMessage = consoleReader.readLine();
+                            writer.println(userToSendMessage);
+                            System.out.println("Enter text message:");
+                            String textMessage = consoleReader.readLine();
+                            writer.println(textMessage);
+                            break;
+                        }
+
                         default:
                             System.out.println("unknown command");
                     }
