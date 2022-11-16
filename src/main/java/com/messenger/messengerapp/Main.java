@@ -1,7 +1,5 @@
 package com.messenger.messengerapp;
 
-import com.sun.jdi.PathSearchingVirtualMachine;
-
 import java.io.*;
 import java.net.Socket;
 
@@ -24,28 +22,29 @@ public class Main {
 
                     switch (command) {
                         case "serverTime": {
-                            getServerTime(writer, command, reader, "server time is ");
+                            getServerAnswer(writer, command, reader, "server time is ");
                             break;
                         }
-                        case "register": {
+                        case "add": {
                             addUser(consoleReader, reader, writer, command);
                             break;
                         }
                         case "login": {
                             writer.println(command);
                             writer.flush();
-                            System.out.println("Enter login and password");
+                            System.out.print("Enter login: ");
                             String login = consoleReader.readLine();
+                            System.out.print("Enter password: ");
                             String pass = consoleReader.readLine();
                             writer.println(login);
-                            getServerTime(writer, pass, reader, "Server answer = ");
+                            getServerAnswer(writer, pass, reader, "Server answer = ");
                             break;
 
                         }
                         case "delete": {
                             writer.println(command);
                             writer.flush();
-                            System.out.println("Enter login for delete");
+                            System.out.print("Enter login for delete: ");
                             String login = consoleReader.readLine();
                             writer.println(login);
                             System.out.println("User " + login + " deleted");
@@ -65,7 +64,7 @@ public class Main {
         }
     }
 
-    private static void getServerTime(PrintWriter writer, String command, BufferedReader reader, String x) throws IOException {
+    private static void getServerAnswer(PrintWriter writer, String command, BufferedReader reader, String x) throws IOException {
         writer.println(command);
         writer.flush();
         String answer = reader.readLine();
@@ -75,10 +74,11 @@ public class Main {
     private static void addUser(BufferedReader consoleReader, BufferedReader reader, PrintWriter writer, String command) throws IOException {
         writer.println(command);
         writer.flush();
-        System.out.println("Enter name and password");
+        System.out.print("Enter name: ");
         String name = consoleReader.readLine();
+        System.out.print("Enter password: ");
         String password = consoleReader.readLine();
         writer.println(name);
-        getServerTime(writer, password, reader, "Server answer = ");
+        getServerAnswer(writer, password, reader, "Server answer = ");
     }
 }
