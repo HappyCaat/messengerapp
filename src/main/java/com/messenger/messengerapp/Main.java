@@ -39,7 +39,6 @@ public class Main {
                             writer.println(login);
                             getServerAnswer(writer, pass, reader, "Server answer = ");
                             break;
-
                         }
                         case "delete": {
                             writer.println(command);
