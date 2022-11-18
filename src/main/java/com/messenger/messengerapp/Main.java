@@ -37,7 +37,10 @@ public class Main {
                             System.out.print("Enter password: ");
                             String pass = consoleReader.readLine();
                             writer.println(login);
+                            writer.println(pass);
                             getServerAnswer(writer, pass, reader, "Server answer = ");
+                            String token = reader.readLine();
+                            System.out.println("Your token is: " + token);
                             break;
                         }
                         case "delete": {
