@@ -1,5 +1,7 @@
 package com.messenger.messengerapp;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -39,6 +41,8 @@ public class Main {
                             writer.println(login);
                             writer.println(pass);
                             getServerAnswer(writer, pass, reader, "Server answer = ");
+                            int userId = Integer.parseInt(reader.readLine());
+                            System.out.println("Userid is: " + userId);
                             String token = reader.readLine();
                             System.out.println("Your token is: " + token);
                             break;
