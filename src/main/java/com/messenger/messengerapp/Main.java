@@ -6,6 +6,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class Main {
+    static String token = "";
+    static int userId = 0;
     public static void main(String[] args) {
         System.out.println("Hello world");
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -18,6 +20,7 @@ public class Main {
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
                 while (true) {
                     String command = consoleReader.readLine();
+
                     if (command.equals("exit")) {
                         break;
                     }
@@ -41,9 +44,9 @@ public class Main {
                             writer.println(login);
                             writer.println(pass);
                             getServerAnswer(writer, pass, reader, "Server answer = ");
-                            int userId = Integer.parseInt(reader.readLine());
+                            userId = Integer.parseInt(reader.readLine());
                             System.out.println("Userid is: " + userId);
-                            String token = reader.readLine();
+                            token = reader.readLine();
                             System.out.println("Your token is: " + token);
                             break;
                         }
@@ -63,9 +66,17 @@ public class Main {
                             System.out.println("Enter user to send message: ");
                             String userToSendMessage = consoleReader.readLine();
                             writer.println(userToSendMessage);
+                            writer.flush();
+                            String answer = reader.readLine();
+                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
                             System.out.println("Enter text message:");
                             String textMessage = consoleReader.readLine();
+                            String userIdStr = Integer.toString(userId);
+                            writer.println(userIdStr);
                             writer.println(textMessage);
+                            writer.println(token);
+                            writer.flush();
+
                             break;
                         }
 
