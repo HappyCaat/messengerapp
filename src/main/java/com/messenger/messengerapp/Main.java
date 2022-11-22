@@ -31,7 +31,7 @@ public class Main {
                             getServerAnswer(writer, command, reader, "server time is ");
                             break;
                         }
-                        case "add": {
+                        case "register": {
                             addUser(consoleReader, reader, writer, command);
                             break;
                         }
@@ -64,25 +64,18 @@ public class Main {
                         case "sendMessage": {
                             writer.println(command);
                             writer.flush();
-                            System.out.println("Enter user to send message: ");
-                            String userToSendMessage = consoleReader.readLine();
-                            writer.println(userToSendMessage);
-                            writer.flush();
-                            //repeat send command if not user
-                            String answer = reader.readLine();
-                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
-                            writer.println(command);
-                            writer.flush();
-
+                            System.out.println("Enter user_id to send message: ");
+                            String userIdToSendMessage = consoleReader.readLine();
                             System.out.println("Enter text message:");
                             String textMessage = consoleReader.readLine();
-                            String userIdStr = Integer.toString(userId);
-                            writer.println(userIdStr);
-                            writer.flush();
+                            writer.println(userIdToSendMessage);
                             writer.println(textMessage);
-                            writer.flush();
                             writer.println(token);
                             writer.flush();
+
+                            String answer = reader.readLine();
+                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
+
                             break;
                         }
                         case "getUser": {
