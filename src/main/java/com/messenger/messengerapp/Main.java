@@ -8,6 +8,7 @@ import java.net.Socket;
 public class Main {
     static String token = "";
     static int userId = 0;
+
     public static void main(String[] args) {
         System.out.println("Hello world");
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -60,23 +61,30 @@ public class Main {
                             break;
                         }
 
-                        case "message": {
+                        case "send_message": {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter user to send message: ");
+                            writer.flush();
                             String userToSendMessage = consoleReader.readLine();
                             writer.println(userToSendMessage);
                             writer.flush();
-                            String answer = reader.readLine();
-                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
+                            //repeat send command if not user
+//                            String answer = reader.readLine();
+//                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
+//                            writer.println(command);
+//                            writer.flush();
+
                             System.out.println("Enter text message:");
+                            writer.flush();
                             String textMessage = consoleReader.readLine();
                             String userIdStr = Integer.toString(userId);
                             writer.println(userIdStr);
+                            writer.flush();
                             writer.println(textMessage);
+                            writer.flush();
                             writer.println(token);
                             writer.flush();
-
                             break;
                         }
 
