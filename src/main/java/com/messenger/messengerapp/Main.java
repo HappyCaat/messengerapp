@@ -61,27 +61,36 @@ public class Main {
                             break;
                         }
 
-                        case "send_message": {
+                        case "sendMessage": {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter user to send message: ");
-                            writer.flush();
                             String userToSendMessage = consoleReader.readLine();
                             writer.println(userToSendMessage);
                             writer.flush();
                             //repeat send command if not user
-//                            String answer = reader.readLine();
-//                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
-//                            writer.println(command);
-//                            writer.flush();
+                            String answer = reader.readLine();
+                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
+                            writer.println(command);
+                            writer.flush();
 
                             System.out.println("Enter text message:");
-                            writer.flush();
                             String textMessage = consoleReader.readLine();
                             String userIdStr = Integer.toString(userId);
                             writer.println(userIdStr);
                             writer.flush();
                             writer.println(textMessage);
+                            writer.flush();
+                            writer.println(token);
+                            writer.flush();
+                            break;
+                        }
+                        case "getUser": {
+                            writer.println(command);
+                            writer.flush();
+                            System.out.println("Enter userId");
+                            String userId = consoleReader.readLine();
+                            writer.println(userId);
                             writer.flush();
                             writer.println(token);
                             writer.flush();
