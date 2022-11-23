@@ -64,17 +64,18 @@ public class Main {
                         case "sendMessage": {
                             writer.println(command);
                             writer.flush();
-                            System.out.println("Enter user_id to send message: ");
-                            String userIdToSendMessage = consoleReader.readLine();
+                            System.out.println("Enter user name to send message: ");
+                            String userToSendMessage = consoleReader.readLine();
                             System.out.println("Enter text message:");
                             String textMessage = consoleReader.readLine();
-                            writer.println(userIdToSendMessage);
+                            writer.println(userToSendMessage);
                             writer.println(textMessage);
                             writer.println(token);
                             writer.flush();
 
+                            //answer
                             String answer = reader.readLine();
-                            System.out.println("Server answer = " + answer + "\n" + "User not found. Try again");
+                            System.out.println("Server answer = " + answer);
 
                             break;
                         }
@@ -87,6 +88,10 @@ public class Main {
                             writer.flush();
                             writer.println(token);
                             writer.flush();
+
+                            //answer
+                            String answer = reader.readLine();
+                            System.out.println("Username: " + answer);
                             break;
                         }
 
