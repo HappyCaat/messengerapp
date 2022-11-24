@@ -94,6 +94,21 @@ public class Main {
                             System.out.println("Username: " + answer);
                             break;
                         }
+                        case "getUserByLogin": {
+                            writer.println(command);
+                            writer.flush();
+                            System.out.println("Enter username");
+                            String userName = consoleReader.readLine();
+                            writer.println(userName);
+                            writer.flush();
+                            writer.println(token);
+                            writer.flush();
+
+                            //answer
+                            String answer = reader.readLine();
+                            System.out.println("Username: " + answer);
+                            break;
+                        }
 
                         default:
                             System.out.println("unknown command");
