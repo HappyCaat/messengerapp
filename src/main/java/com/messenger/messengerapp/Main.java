@@ -27,15 +27,15 @@ public class Main {
                     }
 
                     switch (command) {
-                        case "serverTime": {
+                        case "/serverTime": {
                             getServerAnswer(writer, command, reader, "server time is ");
                             break;
                         }
-                        case "register": {
+                        case "/register": {
                             addUser(consoleReader, reader, writer, command);
                             break;
                         }
-                        case "login": {
+                        case "/login": {
                             writer.println(command);
                             writer.flush();
                             System.out.print("Enter login: ");
@@ -51,7 +51,7 @@ public class Main {
                             System.out.println("Your token is: " + token);
                             break;
                         }
-                        case "delete": {
+                        case "/delete": {
                             writer.println(command);
                             writer.flush();
                             System.out.print("Enter login for delete: ");
@@ -61,7 +61,7 @@ public class Main {
                             break;
                         }
 
-                        case "sendMessage": {
+                        case "/sendMessage": {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter user name to send message: ");
@@ -79,7 +79,7 @@ public class Main {
 
                             break;
                         }
-                        case "getUserById": {
+                        case "/getUserById": {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter userId");
@@ -94,7 +94,7 @@ public class Main {
                             System.out.println("Username: " + answer);
                             break;
                         }
-                        case "getUserByLogin": {
+                        case "/getUserByLogin": {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter username");
