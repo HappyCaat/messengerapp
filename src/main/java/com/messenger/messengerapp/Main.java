@@ -79,7 +79,7 @@ public class Main {
 
                             break;
                         }
-                        case "getUser": {
+                        case "getUserById": {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter userId");
