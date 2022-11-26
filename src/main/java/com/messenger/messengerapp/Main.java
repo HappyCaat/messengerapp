@@ -1,21 +1,17 @@
 package com.messenger.messengerapp;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
+@SuppressWarnings({"InfiniteLoopStatement", "resource"})
 public class Main {
     private static String token = "";
-    private static int userId = 0;
-    private static List<String> messagesList = new ArrayList<>();
-    private static Socket socket;
-
 
     public static void main(String[] args) {
         System.out.println("Hello world");
@@ -23,11 +19,13 @@ public class Main {
         while (true) {
             System.out.println("try connect");
             try {
-                socket = new Socket("localhost", 8080);
+                Socket socket = new Socket("localhost", 8080);
                 System.out.println("connected to server");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
                 while (true) {
+                    System.out.println("--------------------------------------");
+                    System.out.println("Please enter command:\nEnter 'exit' for stop program\n/serverTime - current server time\n/register - register new user\n/login - authorization user\n/sendMessage - send message to user\n/readMessages - read messages\n/getUserById - get user by id\n/getUserByLogin - get user by login");
                     String command = consoleReader.readLine();
 
                     if (command.equals("exit")) {
@@ -35,48 +33,45 @@ public class Main {
                     }
 
                     switch (command) {
-                        case "/serverTime": {
+                        case "/serverTime" -> {
                             getServerAnswer(writer, command, reader, "server time is ");
-                            break;
                         }
-                        case "/register": {
-                            addUser(consoleReader, reader, writer, command);
-                            break;
+
+                        case "/register" -> {
+                            registerUser(consoleReader, reader, writer, command);
                         }
-                        case "/login": {
+
+                        case "/login" -> {
                             writer.println(command);
                             writer.flush();
                             System.out.print("Enter login: ");
                             String login = consoleReader.readLine();
                             System.out.print("Enter password: ");
-                            String pass = consoleReader.readLine();
+                            String password = consoleReader.readLine();
                             writer.println(login);
-                            writer.println(pass);
-                            getServerAnswer(writer, pass, reader, "Server answer = ");
-                            userId = Integer.parseInt(reader.readLine());
+                            writer.println(password);
+                            writer.flush();
+                            //answer
+                            String answer = reader.readLine();
+                            if (!answer.equals("true")) {
+                                System.out.println("failed to login, answer=" + answer);
+                                break;
+                            }
+
+                            int userId = Integer.parseInt(reader.readLine());
                             System.out.println("Userid is: " + userId);
                             token = reader.readLine();
                             System.out.println("Your token is: " + token);
-                            break;
-                        }
-                        case "/delete": {
-                            writer.println(command);
-                            writer.flush();
-                            System.out.print("Enter login for delete: ");
-                            String login = consoleReader.readLine();
-                            writer.println(login);
-                            System.out.println("User " + login + " deleted");
-                            break;
                         }
 
-                        case "/sendMessage": {
+                        case "/sendMessage" -> {
                             writer.println(command);
                             writer.flush();
-                            System.out.println("Enter user name to send message: ");
-                            String userToSendMessage = consoleReader.readLine();
+                            System.out.println("Enter userId to send message: ");
+                            String userIdToSendMessage = consoleReader.readLine();
                             System.out.println("Enter text message:");
                             String textMessage = consoleReader.readLine();
-                            writer.println(userToSendMessage);
+                            writer.println(userIdToSendMessage);
                             writer.println(textMessage);
                             writer.println(token);
                             writer.flush();
@@ -84,22 +79,17 @@ public class Main {
                             //answer
                             String answer = reader.readLine();
                             System.out.println("Server answer = " + answer);
-
-                            break;
                         }
 
-                        case "/readMessages": {
+                        case "/readMessages" -> {
                             writer.println(command);
                             System.out.println("Enter since_date");
                             writer.println(consoleReader.readLine());
                             writer.println(token);
                             writer.flush();
-
-
                             boolean isSuccess = reader.readLine().equals("true");
-
                             if (isSuccess) {
-                                Integer messagesCount = Integer.valueOf(reader.readLine());
+                                int messagesCount = Integer.parseInt(reader.readLine());
                                 ArrayList<Message> messages = new ArrayList<>();
                                 for (int i = 0; i < messagesCount; i++) {
                                     Message message = new Message();
@@ -115,12 +105,9 @@ public class Main {
                                 String failureReason = reader.readLine();
                                 System.out.println("failed to read messages=" + failureReason);
                             }
-                            //answer
-
-                            break;
                         }
 
-                        case "/getUserById": {
+                        case "/getUserById" -> {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter userId");
@@ -133,26 +120,25 @@ public class Main {
                             //answer
                             String answer = reader.readLine();
                             System.out.println("Username: " + answer);
-                            break;
                         }
-                        case "/getUserByLogin": {
+
+                        case "/getUserByLogin" -> {
                             writer.println(command);
                             writer.flush();
                             System.out.println("Enter username");
                             String userName = consoleReader.readLine();
                             writer.println(userName);
-                            writer.flush();
                             writer.println(token);
                             writer.flush();
 
                             //answer
-                            String answer = reader.readLine();
-                            System.out.println("Username: " + answer);
-                            break;
+                            String answerLogin = reader.readLine();
+                            System.out.println("Username: " + answerLogin);
+                            String answerId = reader.readLine();
+                            System.out.println("User Id: " + answerId);
                         }
 
-                        default:
-                            System.out.println("unknown command");
+                        default -> System.out.println("unknown command");
                     }
 
                     writer.flush();
@@ -179,7 +165,7 @@ public class Main {
         System.out.println(x + answer);
     }
 
-    private static void addUser(BufferedReader consoleReader, BufferedReader reader, PrintWriter writer, String command) throws IOException {
+    private static void registerUser(BufferedReader consoleReader, BufferedReader reader, PrintWriter writer, String command) throws IOException {
         writer.println(command);
         writer.flush();
         System.out.print("Enter name: ");
@@ -187,7 +173,11 @@ public class Main {
         System.out.print("Enter password: ");
         String password = consoleReader.readLine();
         writer.println(name);
-        getServerAnswer(writer, password, reader, "Server answer = ");
+        writer.println(password);
+        writer.flush();
+
+        String answer = reader.readLine();
+        System.out.println("register answer= " + answer);
     }
 
 
