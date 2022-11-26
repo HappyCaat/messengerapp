@@ -4,10 +4,17 @@ import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Main {
-    static String token = "";
-    static int userId = 0;
+    private static String token = "";
+    private static int userId = 0;
+    private static List<String> messagesList = new ArrayList<>();
+    private static Socket socket;
+
 
     public static void main(String[] args) {
         System.out.println("Hello world");
@@ -15,7 +22,7 @@ public class Main {
         while (true) {
             System.out.println("try connect");
             try {
-                Socket socket = new Socket("localhost", 8080);
+                socket = new Socket("localhost", 8080);
                 System.out.println("connected to server");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -70,6 +77,7 @@ public class Main {
                             String textMessage = consoleReader.readLine();
                             writer.println(userToSendMessage);
                             writer.println(textMessage);
+                            writer.println(getDate());
                             writer.println(token);
                             writer.flush();
 
@@ -79,6 +87,32 @@ public class Main {
 
                             break;
                         }
+
+                        case "/readMessages": {
+                            writer.println(command);
+                            writer.flush();
+                            System.out.println("Enter day which since return messages");
+                            String date = consoleReader.readLine();
+                            writer.println(date);
+                            writer.println(token);
+                            writer.flush();
+
+                            //answer
+                            try {
+                                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                                try {
+                                    Object object = objectInputStream.readObject();
+                                    messagesList =  (ArrayList<String>) object;
+                                    System.out.println(messagesList.toString());
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
+
                         case "/getUserById": {
                             writer.println(command);
                             writer.flush();
@@ -139,5 +173,10 @@ public class Main {
         String password = consoleReader.readLine();
         writer.println(name);
         getServerAnswer(writer, password, reader, "Server answer = ");
+    }
+
+    private static String getDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        return dateFormat.format(new Date());
     }
 }
