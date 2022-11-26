@@ -1,8 +1,9 @@
 package com.messenger.messengerapp;
 
-import org.w3c.dom.ls.LSOutput;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,7 +78,6 @@ public class Main {
                             String textMessage = consoleReader.readLine();
                             writer.println(userToSendMessage);
                             writer.println(textMessage);
-                            writer.println(getDate());
                             writer.println(token);
                             writer.flush();
 
@@ -90,26 +90,33 @@ public class Main {
 
                         case "/readMessages": {
                             writer.println(command);
-                            writer.flush();
-                            System.out.println("Enter day which since return messages");
-                            String date = consoleReader.readLine();
-                            writer.println(date);
+                            System.out.println("Enter since_date");
+                            writer.println(consoleReader.readLine());
                             writer.println(token);
                             writer.flush();
 
-                            //answer
-                            try {
-                                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-                                try {
-                                    Object object = objectInputStream.readObject();
-                                    messagesList =  (ArrayList<String>) object;
-                                    System.out.println(messagesList.toString());
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
+
+                            boolean isSuccess = reader.readLine().equals("true");
+
+                            if (isSuccess) {
+                                Integer messagesCount = Integer.valueOf(reader.readLine());
+                                ArrayList<Message> messages = new ArrayList<>();
+                                for (int i = 0; i < messagesCount; i++) {
+                                    Message message = new Message();
+                                    message.messageId = Integer.parseInt(reader.readLine());
+                                    message.fromUserId = Integer.parseInt(reader.readLine());
+                                    message.toUserId = Integer.parseInt(reader.readLine());
+                                    message.message = reader.readLine();
+                                    message.date = Long.parseLong(reader.readLine());
+                                    messages.add(message);
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                printMessages(messages);
+                            } else {
+                                String failureReason = reader.readLine();
+                                System.out.println("failed to read messages=" + failureReason);
                             }
+                            //answer
+
                             break;
                         }
 
@@ -157,6 +164,14 @@ public class Main {
         }
     }
 
+    private static void printMessages(ArrayList<Message> messages) {
+
+        System.out.println("print messages, count = " + messages.size());
+        for (Message message : messages) {
+            System.out.println(message);
+        }
+    }
+
     private static void getServerAnswer(PrintWriter writer, String command, BufferedReader reader, String x) throws IOException {
         writer.println(command);
         writer.flush();
@@ -175,8 +190,5 @@ public class Main {
         getServerAnswer(writer, password, reader, "Server answer = ");
     }
 
-    private static String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        return dateFormat.format(new Date());
-    }
+
 }
